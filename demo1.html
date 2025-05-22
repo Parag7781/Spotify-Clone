@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weather Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #0077ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #005dd1;
+    }
+
+    .weather-info {
+      transition: all 0.3s ease;
+    }
+
+    .weather-info img {
+      width: 100px;
+      height: 100px;
+      margin: 1rem auto;
+    }
+
+    .weather-info p {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      color: #444;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 1rem;
+      }
+
+      input[type="text"], button {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌤 Weather Dashboard</h1>
+    <div class="search-box">
+      <input type="text" id="cityInput" placeholder="Enter city name..." />
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <div id="weatherBox" class="weather-info hidden">
+      <h2 id="cityName">City Name</h2>
+      <img id="weatherIcon" src="" alt="Weather Icon" />
+      <p id="description">Description</p>
+      <p id="temperature">Temperature: -- °C</p>
+      <p id="humidity">Humidity: -- %</p>
+      <p id="wind">Wind Speed: -- km/h</p>
+    </div>
+  </div>
+
+  <script>
+    const searchBtn = document.getElementById('searchBtn');
+    const cityInput = document.getElementById('cityInput');
+    const weatherBox = document.getElementById('weatherBox');
+
+    searchBtn.addEventListener('click', () => {
+      const city = cityInput.value.trim();
+      if (city === "") {
+        alert("Please enter a city name.");
+        return;
+      }
+
+      const apiKey = 'YOUR_API_KEY'; // 🔁 Replace this with your actual OpenWeatherMap API key
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+
+      fetch(apiUrl)
+        .then(res => {
+          if (!res.ok) throw new Error("City not found");
+          return res.json();
+        })
+        .then(data => {
+          document.getElementById('cityName').textContent = data.name;
+          document.getElementById('temperature').textContent = `Temperature: ${data.main.temp} °C`;
+          document.getElementById('description').textContent = data.weather[0].description;
+          document.getElementById('humidity').textContent = `Humidity: ${data.main.humidity}%`;
+          document.getElementById('wind').textContent = `Wind Speed: ${data.wind.speed} km/h`;
+          document.getElementById('weatherIcon').src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+
+          weatherBox.classList.remove('hidden');
+        })
+        .catch(err => {
+          alert("City not found or error fetching data.");
+          weatherBox.classList.add('hidden');
+          console.error(err);
+        });
+    });
+  </script>
+</body>
+</html>

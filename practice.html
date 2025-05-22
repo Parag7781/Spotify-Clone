@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Position Example</title>
+  <style>
+    .parent {
+      position: relative; /* Try changing this to static or absolute */
+      width: 300px;
+      height: 200px;
+      background-color: lightblue;
+      margin: 40px;
+      border: 2px solid blue;
+    }
+
+    .child-relative {
+      position: relative;
+      top: 20px;
+      left: 20px;
+      width: 100px;
+      height: 50px;
+      background-color: orange;
+    }
+
+    .child-absolute {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 100px;
+      height: 50px;
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Relative Positioning</h2>
+  <div class="parent">
+    <div class="child-relative">Relative Child</div>
+  </div>
+
+  <h2>Absolute Positioning (inside relative parent)</h2>
+  <div class="parent">
+    <div class="child-absolute">Absolute Child</div>
+  </div>
+
+</body>
+</html>
